@@ -1,0 +1,13 @@
+diff --git a/conf_general.h b/conf_general.h
+index 1e3cf48..7000555 100644
+--- a/conf_general.h
++++ b/conf_general.h
+@@ -16,7 +16,7 @@
+ #if !defined(HW_SOURCE) && !defined(HW_HEADER)
+ #define HW75_300_REV_3
+ #define SHOW_WATTAGE    1
+-//#define DISABLE_HW_LIMITS
++#define DISABLE_HW_LIMITS
+ //always 0 unwanted item
+ 
+ #define PHOTON_181      0

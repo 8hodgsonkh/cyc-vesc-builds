@@ -1,0 +1,17 @@
+--- a/conf_general.h
++++ b/conf_general.h
+@@ -12,12 +12,12 @@
+ #if !defined(HW_SOURCE) && !defined(HW_HEADER)
+ #define HW75_300_REV_3
+ #define SHOW_WATTAGE    1
+-//#define DISABLE_HW_LIMITS
++#define DISABLE_HW_LIMITS
+ 
+ //always 0 unwanted item
+ 
+ #define PHOTON_181      1
+-#define PHOTON_181_2    1
++#define PHOTON_181_2    0
+ 
+ #define PROTON_181      0
+ 

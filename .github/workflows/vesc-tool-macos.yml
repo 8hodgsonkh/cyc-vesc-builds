@@ -1,0 +1,75 @@
+# Builds the CYC edition of VESC Tool 7.00 for macOS: upstream vedderb/vesc_tool at the
+# pinned commit + the patches in tool-src/vesc_tool_7.00_cyc/patches.
+#
+# Qt 5.15.2's prebuilt macOS kit is x86_64 only, so the app is x86_64: native on Intel
+# Macs, Rosetta on Apple Silicon. The runner is arm64, hence Rosetta for qmake/moc.
+#
+# Run it from the Actions tab (Run workflow) or:
+#   gh workflow run vesc-tool-macos.yml -f release_tag=<tag>
+# With a release tag the zip is also attached to that release.
+name: VESC Tool CYC (macOS)
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Release tag to attach the zip to (leave empty to only keep it as a run artifact)
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  macos:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rosetta
+        run: sudo softwareupdate --install-rosetta --agree-to-license || true
+
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: '5.15.2'
+          host: mac
+          target: desktop
+          arch: clang_64
+          cache: true
+
+      - name: Upstream VESC Tool + CYC patches
+        run: |
+          git clone --filter=blob:none --no-checkout https://github.com/vedderb/vesc_tool.git vt
+          git -C vt checkout "$(cat tool-src/vesc_tool_7.00_cyc/UPSTREAM_COMMIT)"
+          git -C vt -c user.name=ci -c user.email=ci@localhost am "$PWD"/tool-src/vesc_tool_7.00_cyc/patches/*.patch
+
+      - name: Drop AGL from Qt's mkspecs (removed from current macOS SDKs)
+        run: |
+          QT="${QT_ROOT_DIR:-$Qt5_DIR}"
+          sed -i '' 's/ -framework AGL//' "$QT/mkspecs/common/mac.conf"
+          grep -n "QMAKE_LIBS_OPENGL" "$QT/mkspecs/common/mac.conf"
+
+      - name: Build (x86_64)
+        working-directory: vt
+        run: |
+          arch -x86_64 qmake -config release "CONFIG += release_macos build_original" -after "QMAKE_APPLE_DEVICE_ARCHS=x86_64"
+          arch -x86_64 make -j"$(sysctl -n hw.ncpu)"
+          ls -la build/macos
+
+      - name: Bundle Qt, ad-hoc sign, zip
+        working-directory: vt/build/macos
+        run: |
+          arch -x86_64 macdeployqt "VESC Tool.app" -qmldir=../..
+          codesign --force --deep -s - "VESC Tool.app"
+          ditto -c -k --keepParent "VESC Tool.app" "$GITHUB_WORKSPACE/vesc_tool_cyc_503_macos.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vesc_tool_cyc_503_macos
+          path: vesc_tool_cyc_503_macos.zip
+
+      - name: Attach to release
+        if: inputs.release_tag != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ inputs.release_tag }}" vesc_tool_cyc_503_macos.zip --clobber --repo "${{ github.repository }}"

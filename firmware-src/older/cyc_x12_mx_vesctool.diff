@@ -1,0 +1,44 @@
+diff --git a/conf_general.h b/conf_general.h
+index ec5847e..4438cd5 100644
+--- a/conf_general.h
++++ b/conf_general.h
+@@ -16,21 +16,21 @@
+ #if !defined(HW_SOURCE) && !defined(HW_HEADER)
+ #define HW75_300_REV_3
+ #define SHOW_WATTAGE    1
+-//#define DISABLE_HW_LIMITS
++#define DISABLE_HW_LIMITS
+ //always 0 unwanted item
+ 
+-#define PHOTON_181      1  //Gen1 VTON
+-#define PHOTON_181_2    1  //Gen2 VTON  Need Enable Gen1 for Gen2 and disable PHOTON_181
++#define PHOTON_181      0  //Gen1 VTON
++#define PHOTON_181_2    0  //Gen2 VTON  Need Enable Gen1 for Gen2 and disable PHOTON_181
+ 
+ #define PROTON_181      0  //Gen2 VTON  Need Enable PHOTON_181_2
+-#define VSBM            0   //6 or 12 for logic like gen2 pas
++#define VSBM            1   //6 or 12 for logic like gen2 pas
+ 
+ #define VSBM_181        0   //6FET
+-#define VPRO_181        0   //12FET
++#define VPRO_181        1   //12FET
+ #define FW_CURRENT      0
+ #define CALIBRATION     0
+ #define AM              0
+-#define MX              0
++#define MX              1
+ #define EPAC            0
+ #define JAPAN           0
+ #define BFE             0
+@@ -171,7 +171,11 @@
+ #if  VPRO_181
+ #if  !RISTRETTO
+ #ifdef DISABLE_HW_LIMITS
++#if MX
++#define HW_NAME		"X12       20260623MX"//need add space to seperate serial.no
++#else
+ #define HW_NAME		"X12       20250811UL"//need add space to seperate serial.no
++#endif
+ //                   12345678901234567890
+ #else
+ #if (!MX && !EPAC && !JAPAN && !NK)

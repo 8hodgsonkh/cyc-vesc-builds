@@ -1,0 +1,11 @@
+--- a/conf_general.h
++++ b/conf_general.h
+@@ -17,7 +17,7 @@
+ //always 0 unwanted item
+ 
+ #define PHOTON_181      1
+-#define PHOTON_181_2    1
++#define PHOTON_181_2    0
+ 
+ #define PROTON_181      0
+ 

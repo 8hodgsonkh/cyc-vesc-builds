@@ -1,0 +1,27 @@
+From f349a4829125bee238cba595fceffbcba037d65b Mon Sep 17 00:00:00 2001
+From: Haz <haz@local>
+Date: Sat, 17 Oct 2026 00:18:43 +0100
+Subject: [PATCH 2/4] build_android_cyc: pin gradle JVM to TLS 1.2 (Java 8 "Tag
+ mismatch!" on maven downloads)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ build_android_cyc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/build_android_cyc b/build_android_cyc
+index 6fa2516..58c6c3b 100755
+--- a/build_android_cyc
++++ b/build_android_cyc
+@@ -16,6 +16,8 @@ export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/23.1.7779620
+ export ANDROID_SDK_ROOT=$ANDROID_HOME
+ 
+ export JAVA_HOME=/usr/lib/jvm/java-8-openjdk
++# Java 8's TLS 1.3 fails maven downloads with "Tag mismatch!"; keep gradle on TLS 1.2
++export JAVA_TOOL_OPTIONS="-Djdk.tls.client.protocols=TLSv1.2 -Dhttps.protocols=TLSv1.2"
+ export PATH=$PATH:$ANDROID_HOME/Sdk/tools:/usr/bin:$JAVA_HOME/bin
+ 
+ rm -rf build/android/*
+-- 
+2.56.0
+

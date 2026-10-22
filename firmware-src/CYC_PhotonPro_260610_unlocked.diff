@@ -1,0 +1,19 @@
+--- a/conf_general.h
++++ b/conf_general.h
+@@ -16,13 +16,13 @@
+ #if !defined(HW_SOURCE) && !defined(HW_HEADER)
+ #define HW75_300_REV_3
+ #define SHOW_WATTAGE    1
+-//#define DISABLE_HW_LIMITS
++#define DISABLE_HW_LIMITS
+ //always 0 unwanted item
+ 
+-#define PHOTON_181      1  //Gen1 VTON
++#define PHOTON_181      0  //Gen1 VTON
+ #define PHOTON_181_2    1  //Gen2 VTON  Need Enable Gen1 for Gen2 and disable PHOTON_181
+ 
+-#define PROTON_181      0  //Gen2 VTON  Need Enable PHOTON_181_2
++#define PROTON_181      1  //Gen2 VTON  Need Enable PHOTON_181_2
+ #define VSBM            0   //6 or 12 for logic like gen2 pas
+ 
+ #define VSBM_181        0   //6FET

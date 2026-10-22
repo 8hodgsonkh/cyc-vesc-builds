@@ -1,0 +1,48 @@
+From 693da8f926e55282232cff609ea917cbf8639911 Mon Sep 17 00:00:00 2001
+From: Haz <haz@local>
+Date: Thu, 22 Oct 2026 20:23:36 +0100
+Subject: [PATCH 4/4] Windows (MXE): forward BluetoothSdpGetElementData cdecl
+ -> stdcall
+
+mingw-w64 bluetoothapis.h declares it without WINAPI, so the static 32-bit
+Qt5Bluetooth references a symbol libbthprops.a doesn't export and the link
+fails. CYC firmware has USB compiled out, so desktop users need Bluetooth.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ vesc_tool.pro |  1 +
+ win_bt_shim.c | 10 ++++++++++
+ 2 files changed, 11 insertions(+)
+ create mode 100644 win_bt_shim.c
+
+diff --git a/vesc_tool.pro b/vesc_tool.pro
+index 3298b21..7a29d33 100644
+--- a/vesc_tool.pro
++++ b/vesc_tool.pro
+@@ -178,6 +178,7 @@ release_win {
+     MOC_DIR = build/win/obj
+     RCC_DIR = build/win/obj
+     UI_DIR = build/win/obj
++    SOURCES += win_bt_shim.c
+ }
+ 
+ release_lin {
+diff --git a/win_bt_shim.c b/win_bt_shim.c
+new file mode 100644
+index 0000000..5cabb9c
+--- /dev/null
++++ b/win_bt_shim.c
+@@ -0,0 +1,10 @@
++// mingw-w64's bluetoothapis.h declares BluetoothSdpGetElementData without
++// WINAPI, so the static Qt5Bluetooth (32-bit MXE) references the cdecl name
++// while libbthprops.a only exports the stdcall one. Forward cdecl -> stdcall.
++#include <windows.h>
++
++DWORD __stdcall bthprops_sdp_get_element_data(LPBYTE, ULONG, void *) __asm__("_BluetoothSdpGetElementData@12");
++
++DWORD BluetoothSdpGetElementData(LPBYTE stream, ULONG len, void *data) {
++	return bthprops_sdp_get_element_data(stream, len, data);
++}
+-- 
+2.56.0
+

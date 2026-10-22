@@ -1,0 +1,8 @@
+# binaries go up as release assets, not into git
+releases/*/*
+!releases/*/NOTES.md
+!releases/*/SHA256SUMS.txt
+
+# local only
+PUBLISHING.md
+publish.sh

@@ -1,0 +1,34 @@
+--- a/conf_general.h
++++ b/conf_general.h
+@@ -16,14 +16,14 @@
+ 
+ //always 0 unwanted item
+ 
+-#define PHOTON_181      1
+-#define PHOTON_181_2    1
++#define PHOTON_181      0
++#define PHOTON_181_2    0
+ 
+ #define PROTON_181      0
+ 
+-#define VSBM            0  //6 or 12 for logic like gen2 pas
++#define VSBM            1  //6 or 12 for logic like gen2 pas
+ #define VSBM_181        0  //6FET
+-#define VPRO_181        0  //12FET
++#define VPRO_181        1  //12FET
+ #define FW_CURRENT      0
+ #define CALIBRATION     0
+ #define AM              0
+@@ -31,9 +31,9 @@
+ 
+ #if  !(PHOTON_181||PROTON_181)
+ //pre-set only
+-#define RISTRETTO       1
+-#define X1PRO_4         1
+-#define X1PRO_3         0
++#define RISTRETTO       0
++#define X1PRO_4         0
++#define X1PRO_3         1
+ #define X1STL           0
+ #endif
+ 

@@ -1,0 +1,28 @@
+From e56540a90a2bb125777b7387afcf6d62b0f34fe0 Mon Sep 17 00:00:00 2001
+From: Haz <haz@local>
+Date: Thu, 22 Oct 2026 20:18:25 +0100
+Subject: [PATCH 3/4] Desktop: show ADC > CYC Settings on the ADC General tab
+
+Same one-liner as the 3.01 CYC edition; the 7.00 edition was mobile-only,
+where QML lists every subgroup on its own.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ pages/pageappadc.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/pages/pageappadc.cpp b/pages/pageappadc.cpp
+index 7eabc98..cb4bd87 100644
+--- a/pages/pageappadc.cpp
++++ b/pages/pageappadc.cpp
+@@ -75,6 +75,7 @@ void PageAppAdc::reloadParams()
+         ui->throttleCurveTab->clearParams();
+ 
+         ui->generalTab->addParamSubgroup(mVesc->appConfig(), "adc", "general");
++        ui->generalTab->addParamSubgroup(mVesc->appConfig(), "adc", "cyc settings"); // CYC edition
+         ui->mappingTab->addParamSubgroup(mVesc->appConfig(), "adc", "mapping");
+         ui->throttleCurveTab->addParamSubgroup(mVesc->appConfig(), "adc", "throttle curve");
+     }
+-- 
+2.56.0
+
